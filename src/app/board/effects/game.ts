@@ -2,9 +2,7 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/exhaustMap';
 import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/operator/takeWhile';
-import 'rxjs/add/operator/delay';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/take';
 import { Injectable } from '@angular/core';
@@ -15,7 +13,6 @@ import { interval } from 'rxjs/observable/interval';
 
 import * as game from '../../core/actions/game';
 import * as fromRoot from '../../reducers';
-// import * as board from '../../board/actions/board';
 
 import { GameService } from '../../core/services/game.service';
 
@@ -39,18 +36,13 @@ export class GameEffects {
 
   @Effect()
   startGameplay$ = this.actions$
-    .ofType<game.ResetGame>(game.START_GAME, game.PAUSE_GAME)
+    .ofType<game.ResetGame>(game.START_GAME, game.PAUSE_GAME, game.RESET_GAME)
     .map(action => action.type)
     .switchMap(type =>
       interval(10)
-        .takeWhile(() => type !== game.PAUSE_GAME)
-        .switchMap(() => this.store.select(fromRoot.getGameboard).take(1))
-    )
-    // Changing to switchMap seems to be more resposive but that could be a symptom of another
-    // problem
-    .exhaustMap(gameboard => this.gameService.nextGeneration(gameboard))
-    .map(gameboard => new game.GameLoaded(gameboard))
-    .catch(err => of(err));
+        .takeWhile(() => type === game.START_GAME)
+        .map(() => new game.NextGameStep())
+    );
 
   @Effect()
   getNextGeneration$ = this.actions$

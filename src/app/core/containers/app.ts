@@ -18,15 +18,13 @@ function sizeToPixels(size) {
 })
 export class AppComponent implements OnInit {
   boardDimensions$ = this.store.select(fromRoot.getGameboardDimensions);
-  // width$ = this.store.select(fromRoot.getWidth);
-  // height$ = this.store.select(fromRoot.getHeight);
-
   boardHeight$ = this.store.select(fromRoot.getHeight).map(sizeToPixels);
   boardWidth$ = this.store.select(fromRoot.getWidth).map(sizeToPixels);
   gameboard$ = this.store.select(fromRoot.getGameboard);
   isPlaying$ = this.store.select(fromRoot.getPlaying);
+  generation$ = this.store.select(fromRoot.getGeneration);
 
-  title = 'Conways Game of Life';
+  title = "Conway's Game of Life";
 
   constructor(private store: Store<fromRoot.State>) {}
 

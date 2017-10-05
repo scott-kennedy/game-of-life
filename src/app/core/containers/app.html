@@ -1,6 +1,8 @@
 <cgol-layout>
   <cgol-sidenav>
 
+    <div>{{title}}</div>
+    <div>Generation: {{generation$ | async}}</div>
     <!-- Convert to buttons and use disable -->
     <cgol-nav-item (onClick)="startGame()"><span>Play</span></cgol-nav-item>
     <cgol-nav-item (onClick)="pauseGame()"><span>Pause</span></cgol-nav-item>
