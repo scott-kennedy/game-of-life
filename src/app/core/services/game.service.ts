@@ -29,7 +29,7 @@ export class GameService {
       gameBoard.map((cell: Cell) => {
         const cellCopy = cell.clone();
 
-        const neighbors = cellCopy.countLivingNeighbors(gameBoard);
+        const neighbors = Cell.countLivingNeighbors(cellCopy, gameBoard);
         if (cellCopy.isAlive && (neighbors > 3 || neighbors < 2)) {
           cellCopy.death();
         }

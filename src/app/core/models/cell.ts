@@ -1,27 +1,27 @@
 export class Cell {
   constructor(private x: number, private y: number, public isAlive: boolean) {}
 
-  clone() {
-    return new Cell(this.x, this.y, this.isAlive);
-  }
-
-  findNeighbors(board) {
-    return board.filter(cell => {
-      const xDistance = Math.abs(this.x - cell.x);
-      const yDistance = Math.abs(this.y - cell.y);
+  public static findNeighbors(cell, board) {
+    return board.filter(otherCell => {
+      const xDistance = Math.abs(cell.x - otherCell.x);
+      const yDistance = Math.abs(cell.y - otherCell.y);
 
       if (xDistance <= 1 && yDistance <= 1) {
-        return cell;
+        return otherCell;
       }
       return null;
     });
   }
 
-  countLivingNeighbors(board = []) {
-    const neighbors = this.findNeighbors(board);
+  public static countLivingNeighbors(cell, board = []) {
+    const neighbors = Cell.findNeighbors(cell, board);
 
     // Subtract one because we include ourselves in the neighbors
-    return neighbors.filter(cell => cell.isAlive).length - (this.isAlive ? 1 : 0);
+    return neighbors.filter(neighbor => neighbor.isAlive).length - (cell.isAlive ? 1 : 0);
+  }
+
+  clone() {
+    return new Cell(this.x, this.y, this.isAlive);
   }
 
   birth() {
