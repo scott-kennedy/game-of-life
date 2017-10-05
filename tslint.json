@@ -26,17 +26,26 @@
     "label-position": true,
     "max-line-length": [
       true,
-      140
+      100
     ],
     "member-access": false,
     "member-ordering": [
       true,
       {
         "order": [
-          "static-field",
-          "instance-field",
-          "static-method",
-          "instance-method"
+          "public-static-field",
+          "protected-static-field",
+          "private-static-field",
+          "public-instance-field",
+          "protected-instance-field",
+          "private-instance-field",
+          "constructor",
+          "public-static-method",
+          "protected-static-method",
+          "private-static-method",
+          "public-instance-method",
+          "protected-instance-method",
+          "private-instance-method"
         ]
       }
     ],
@@ -117,13 +126,13 @@
     "directive-selector": [
       true,
       "attribute",
-      "app",
+      "cgol",
       "camelCase"
     ],
     "component-selector": [
       true,
-      "element",
-      "app",
+      ["attribute", "element"],
+      "cgol",
       "kebab-case"
     ],
     "use-input-property-decorator": true,

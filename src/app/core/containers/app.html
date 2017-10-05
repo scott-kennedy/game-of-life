@@ -1,0 +1,25 @@
+<cgol-layout>
+  <cgol-sidenav>
+
+    <!-- Convert to buttons and use disable -->
+    <cgol-nav-item (onClick)="startGame()"><span>Play</span></cgol-nav-item>
+    <cgol-nav-item (onClick)="pauseGame()"><span>Pause</span></cgol-nav-item>
+    <cgol-nav-item (onClick)="nextGameStep()"><span>Step</span></cgol-nav-item>
+    <cgol-nav-item (onClick)="resetGame()"><span>Reset</span></cgol-nav-item>
+    <cgol-nav-item>
+      <span>Width</span>
+      <md-slider [disabled]="isPlaying$ | async" (input)="changeWidth($event)" min="5" max="25" step="1" [value]="(boardDimensions$ | async).width"
+        thumbLabel tickInterval="5"></md-slider>
+    </cgol-nav-item>
+    <cgol-nav-item>
+      <span>Height</span>
+      <!-- if playing then disable sliders -->
+      <md-slider [disabled]="isPlaying$ | async" (input)="changeHeight($event)" min="5" max="25" step="1" [value]="(boardDimensions$ | async).height"
+        thumbLabel tickInterval="5"></md-slider>
+    </cgol-nav-item>
+  </cgol-sidenav>
+
+  <div class="main-content">
+    <cgol-board-page [gameboard]="gameboard$ | async" [cellSize]="10" [boardHeight]="boardHeight$ | async" [boardWidth]="boardWidth$ | async"></cgol-board-page>
+  </div>
+</cgol-layout>
