@@ -67,3 +67,7 @@ export const getWidth = createSelector(selectGameState, fromGame.getWidth);
 export const getGameboardDimensions = createSelector(getHeight, getWidth, (height, width) => {
   return { height: height, width: width };
 });
+
+export const getFlattenedGameboard = createSelector(getGameboard, gameboard => {
+  return [].concat.apply([], gameboard);
+});

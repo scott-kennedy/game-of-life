@@ -22,7 +22,7 @@ export class GameEffects {
   gameSetup$ = this.actions$
     .ofType<game.InitializeGame>(game.INITIALIZE_GAME)
     .map(action => action.payload)
-    .switchMap(dimensions => this.gameService.initializeBoard(dimensions.width, dimensions.height))
+    .switchMap(size => this.gameService.buildNewGameboard(size.width, size.height))
     .map(gameboard => new game.GameLoaded(gameboard))
     .catch(err => of(err));
 
@@ -30,7 +30,7 @@ export class GameEffects {
   resetGameboard$ = this.actions$
     .ofType<game.ResetGame>(game.RESET_GAME)
     .switchMap(() => this.store.select(fromRoot.getGameboardDimensions).take(1))
-    .switchMap(dimensions => this.gameService.initializeBoard(dimensions.width, dimensions.height))
+    .switchMap(size => this.gameService.buildNewGameboard(size.width, size.height))
     .map(gameboard => new game.GameLoaded(gameboard))
     .catch(err => of(err));
 
@@ -39,7 +39,7 @@ export class GameEffects {
     .ofType<game.ResetGame>(game.START_GAME, game.PAUSE_GAME, game.RESET_GAME)
     .map(action => action.type)
     .switchMap(type =>
-      interval(10)
+      interval(500)
         .takeWhile(() => type === game.START_GAME)
         .map(() => new game.NextGameStep())
     );
@@ -48,15 +48,16 @@ export class GameEffects {
   getNextGeneration$ = this.actions$
     .ofType<game.ResetGame>(game.NEXT_GAME_STEP)
     .switchMap(() => this.store.select(fromRoot.getGameboard).take(1))
-    .switchMap(gameboard => this.gameService.nextGeneration(gameboard))
-    .map(gameboard => new game.GameLoaded(gameboard))
+    .switchMap(gameboard => this.gameService.getNextGeneration(gameboard))
+    .map(nextGameboard => new game.GameLoaded(nextGameboard))
     .catch(err => of(err));
 
   @Effect()
   resizeGameboard$ = this.actions$
     .ofType<game.ResetGame>(game.CHANGE_HEIGHT, game.CHANGE_WIDTH)
     .switchMap(() => this.store.select(fromRoot.getGameboardDimensions).take(1))
-    .switchMap(dimensions => this.gameService.initializeBoard(dimensions.width, dimensions.height))
+    // right now resizing adds/removes live cells, do we want to do that or do we want static?
+    .switchMap(size => this.gameService.buildNewGameboard(size.width, size.height))
     .map(gameboard => new game.GameLoaded(gameboard))
     .catch(err => of(err));
 

@@ -8,7 +8,8 @@ import * as fromRoot from '../../reducers';
 import * as game from '../actions/game';
 
 function sizeToPixels(size) {
-  return 10 * size + 1 * size;
+  return 10 * size + 4 * (size - 1);
+  // return 10 * size + 1 * size;
 }
 
 @Component({
@@ -20,7 +21,7 @@ export class AppComponent implements OnInit {
   boardDimensions$ = this.store.select(fromRoot.getGameboardDimensions);
   boardHeight$ = this.store.select(fromRoot.getHeight).map(sizeToPixels);
   boardWidth$ = this.store.select(fromRoot.getWidth).map(sizeToPixels);
-  gameboard$ = this.store.select(fromRoot.getGameboard);
+  gameboard$ = this.store.select(fromRoot.getFlattenedGameboard);
   isPlaying$ = this.store.select(fromRoot.getPlaying);
   generation$ = this.store.select(fromRoot.getGeneration);
 
@@ -29,8 +30,8 @@ export class AppComponent implements OnInit {
   constructor(private store: Store<fromRoot.State>) {}
 
   ngOnInit() {
+    // Rather than subscribe dispatch an action to init the board
     this.boardDimensions$.take(1).subscribe(dimensions => {
-      console.log('Dimensions:', dimensions);
       this.store.dispatch(new game.InitializeGame(dimensions));
     });
   }

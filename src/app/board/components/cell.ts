@@ -2,14 +2,13 @@ import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
-  selector: '[cgol-cell]',
+  selector: 'cgol-cell',
   template: `
-    <svg:rect
+  <svg [attr.width]="size" [attr.height]="size">
+    <rect
       [attr.height]="size"
       [attr.width]="size"
-      [attr.x]="xPosition"
-      [attr.y]="yPosition"
-      [attr.fill]="(isAlive ? '#32CD32' : '#ff0000')"></svg:rect>
+      [attr.fill]="(isAlive ? '#32CD32' : '#ff0000')"></rect>
   `
 })
 export class CellComponent {
@@ -19,6 +18,8 @@ export class CellComponent {
   @Input() isAlive: boolean;
 
   constructor() {}
+  // 4px between svgs so 5 svgs has 16px whitespace
+  // and at 10px per svg we get 66px (50 + 16) necessary
 
   get xPosition() {
     return this.x * this.size + this.x * 1;
