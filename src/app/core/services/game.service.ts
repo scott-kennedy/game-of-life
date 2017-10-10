@@ -42,6 +42,15 @@ export class GameService {
     return of(nextGameboard);
   }
 
+  checkGameEnded(gameboard = []): Observable<boolean> {
+    // We flatten the gameboard in two places, maybe we should just always return a flattened
+    // gameboard that way the service can take care of everything.
+    const flatGameboard = [].concat.apply([], gameboard);
+    const hasLivingCells = flatGameboard.filter(cell => cell === 1).length;
+
+    return of(!hasLivingCells);
+  }
+
   private countLivingNeighbors(row, col, board) {
     // Simplified way of counting neighbors
     return (

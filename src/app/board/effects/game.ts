@@ -36,13 +36,12 @@ export class GameEffects {
 
   @Effect()
   startGameplay$ = this.actions$
-    .ofType<game.ResetGame>(game.START_GAME, game.PAUSE_GAME, game.RESET_GAME)
-    .map(action => action.type)
-    .switchMap(type =>
-      interval(500)
-        .takeWhile(() => type === game.START_GAME)
-        .map(() => new game.NextGameStep())
-    );
+    .switchMap(() => this.store.select(fromRoot.getPlaying).take(1))
+    .switchMap(isPlaying => {
+      return interval(500)
+        .takeWhile(() => isPlaying)
+        .map(() => new game.NextGameStep());
+    });
 
   @Effect()
   getNextGeneration$ = this.actions$
@@ -59,6 +58,15 @@ export class GameEffects {
     // right now resizing adds/removes live cells, do we want to do that or do we want static?
     .switchMap(size => this.gameService.buildNewGameboard(size.width, size.height))
     .map(gameboard => new game.GameLoaded(gameboard))
+    .catch(err => of(err));
+
+  @Effect()
+  checkEndConditions$ = this.actions$
+    .ofType<game.ResetGame>(game.GAME_LOADED)
+    .switchMap(() => this.store.select(fromRoot.getGameboard).take(1))
+    .switchMap(gameboard => this.gameService.checkGameEnded(gameboard))
+    // We could combine these into a single action, GameStatus and pass a payload
+    .map(endOfGame => (endOfGame ? new game.GameCompleted() : new game.GameInProgress()))
     .catch(err => of(err));
 
   constructor(

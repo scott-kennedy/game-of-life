@@ -6,6 +6,7 @@ export const START_GAME = '[Game] Start Game';
 export const PAUSE_GAME = '[Game] Pause Game';
 export const RESET_GAME = '[Game] Reset Game';
 export const GAME_COMPLETED = '[Game] Game Completed';
+export const GAME_IN_PROGRESS = '[Game] Game in Progress';
 export const NEXT_GAME_STEP = '[Game] Next Game Step';
 
 export const CHANGE_HEIGHT = '[Game] Change Height';
@@ -37,6 +38,10 @@ export class GameCompleted implements Action {
   readonly type = GAME_COMPLETED;
 }
 
+export class GameInProgress implements Action {
+  readonly type = GAME_IN_PROGRESS;
+}
+
 export class NextGameStep implements Action {
   readonly type = NEXT_GAME_STEP;
 }
@@ -58,6 +63,7 @@ export type Actions =
   | PauseGame
   | ResetGame
   | GameCompleted
+  | GameInProgress
   | NextGameStep
   | ChangeHeight
   | ChangeWidth;
