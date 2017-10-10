@@ -58,26 +58,26 @@ export class GameService {
 
   private addLivingCells(board, width, cells = []) {
     cells.map(cell => {
-      const row = cell[0];
-      const col = cell[1];
+      const col = cell[0];
+      const row = cell[1];
       board[row][col] = 1;
     });
     return of(board);
   }
 
   private initializeLiveCells(width: number, height: number) {
-    const gameboard = [];
+    const liveCells = [];
 
     for (let y = 0; y < height; y++) {
       for (let x = 0; x < width; x++) {
         const isAlive = Math.random() > 0.85 ? true : false;
         if (isAlive) {
-          gameboard.push([x, y]);
+          liveCells.push([x, y]);
         }
       }
     }
 
-    return of(gameboard);
+    return of(liveCells);
   }
 
   private createEmptyBoard(width: number, height: number) {
