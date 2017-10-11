@@ -22,7 +22,7 @@
   </cgol-sidenav>
 
   <div class="main-content">
-    <cgol-board-page [dimensions]="boardDimensions$ | async" [gameboard]="gameboard$ | async" [cellSize]="10" [boardHeight]="boardHeight$ | async"
-      [boardWidth]="boardWidth$ | async"></cgol-board-page>
+    <cgol-board-page [dimensions]="boardDimensions$ | async" [gameboard]="gameboard$ | async" [cellSize]="10" [boardHeight]="boardHeightInPixels$ | async"
+      [boardWidth]="boardWidthInPixels$ | async"></cgol-board-page>
   </div>
 </cgol-layout>

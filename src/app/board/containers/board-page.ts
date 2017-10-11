@@ -20,8 +20,6 @@ export class BoardPageComponent {
   @Input() boardHeight;
   @Input() boardWidth;
   @Input() cellSize;
-  @Input() dimensions;
-  emptyBoard;
 
   constructor() {}
 }

@@ -20,12 +20,4 @@ export class CellComponent {
   constructor() {}
   // 4px between svgs so 5 svgs has 16px whitespace
   // and at 10px per svg we get 66px (50 + 16) necessary
-
-  get xPosition() {
-    return this.x * this.size + this.x * 1;
-  }
-
-  get yPosition() {
-    return this.y * this.size + this.y * 1;
-  }
 }

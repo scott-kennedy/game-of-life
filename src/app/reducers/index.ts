@@ -21,7 +21,6 @@ import { storeFreeze } from 'ngrx-store-freeze';
  * notation packages up all of the exports into a single object.
  */
 
-// import * as fromSidenav from '../core/reducers/sidenav';
 import * as fromGame from '../core/reducers/game';
 
 /**
@@ -29,7 +28,6 @@ import * as fromGame from '../core/reducers/game';
  * our top level state interface is just a map of keys to inner state types.
  */
 export interface State {
-  // sidenav: fromSidenav.State;
   game: fromGame.State;
 }
 
@@ -39,7 +37,6 @@ export interface State {
  * and the current or initial state and return a new immutable state.
  */
 export const reducers: ActionReducerMap<State> = {
-  // sidenav: fromSidenav.reducer,
   game: fromGame.reducer
 };
 

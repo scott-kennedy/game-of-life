@@ -2,14 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { MdSliderChange } from '@angular/material';
 
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
 
 import * as fromRoot from '../../reducers';
 import * as game from '../actions/game';
 
-function sizeToPixels(size) {
+function sizeToPixels(size: number): number {
   return 10 * size + 4 * (size - 1);
-  // return 10 * size + 1 * size;
 }
 
 @Component({
@@ -19,8 +17,8 @@ function sizeToPixels(size) {
 })
 export class AppComponent implements OnInit {
   boardDimensions$ = this.store.select(fromRoot.getGameboardDimensions);
-  boardHeight$ = this.store.select(fromRoot.getHeight).map(sizeToPixels);
-  boardWidth$ = this.store.select(fromRoot.getWidth).map(sizeToPixels);
+  boardHeightInPixels$ = this.store.select(fromRoot.getHeight).map(sizeToPixels);
+  boardWidthInPixels$ = this.store.select(fromRoot.getWidth).map(sizeToPixels);
   gameboard$ = this.store.select(fromRoot.getFlattenedGameboard);
   isPlaying$ = this.store.select(fromRoot.getPlaying);
   generation$ = this.store.select(fromRoot.getGeneration);

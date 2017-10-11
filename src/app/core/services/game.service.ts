@@ -12,7 +12,7 @@ import { of } from 'rxjs/observable/of';
 export class GameService {
   constructor() {}
 
-  buildNewGameboard(width, height) {
+  buildNewGameboard(width, height): Observable<any> {
     return this.initializeLiveCells(width, height).switchMap(livingCells =>
       this.createEmptyBoard(width, height).switchMap(board =>
         this.addLivingCells(board, width, livingCells)
@@ -20,7 +20,7 @@ export class GameService {
     );
   }
 
-  getNextGeneration(gameboard = []) {
+  getNextGeneration(gameboard = []): Observable<any> {
     const nextGameboard = gameboard.map(row => [...row]);
     const rows = gameboard.length;
     const cols = gameboard[0].length;
@@ -51,7 +51,7 @@ export class GameService {
     return of(!hasLivingCells);
   }
 
-  private countLivingNeighbors(row, col, board) {
+  private countLivingNeighbors(row: number, col: number, board): number {
     // Simplified way of counting neighbors
     return (
       this.getNeighbor(row - 1, col - 1, board) +
@@ -65,7 +65,7 @@ export class GameService {
     );
   }
 
-  private addLivingCells(board, width, cells = []) {
+  private addLivingCells(board: number, width: number, cells = []): Observable<any> {
     cells.map(cell => {
       const col = cell[0];
       const row = cell[1];
@@ -74,7 +74,7 @@ export class GameService {
     return of(board);
   }
 
-  private initializeLiveCells(width: number, height: number) {
+  private initializeLiveCells(width: number, height: number): Observable<any> {
     const liveCells = [];
 
     for (let y = 0; y < height; y++) {
@@ -89,7 +89,7 @@ export class GameService {
     return of(liveCells);
   }
 
-  private createEmptyBoard(width: number, height: number) {
+  private createEmptyBoard(width: number, height: number): Observable<any> {
     return of(
       Array(height)
         .fill(0)
@@ -97,7 +97,7 @@ export class GameService {
     );
   }
 
-  private getNeighbor(row, col, board) {
+  private getNeighbor(row: number, col: number, board): number {
     try {
       return board[row][col] !== undefined ? board[row][col] : 0;
     } catch (e) {
@@ -105,7 +105,7 @@ export class GameService {
     }
   }
 
-  private compareGenerations(gameboard, nextGameboard) {
+  private compareGenerations(gameboard, nextGameboard): boolean {
     // Lazy way of comapring the two arrays
     return gameboard.toString() === nextGameboard.toString();
   }

@@ -1,9 +1,9 @@
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/exhaustMap';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/operator/takeWhile';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/mapTo';
 import 'rxjs/add/operator/take';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
@@ -40,7 +40,7 @@ export class GameEffects {
     .switchMap(isPlaying => {
       return interval(500)
         .takeWhile(() => isPlaying)
-        .map(() => new game.NextGameStep());
+        .mapTo(new game.NextGameStep());
     });
 
   @Effect()
