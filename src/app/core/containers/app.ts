@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MdSliderChange } from '@angular/material';
+import { MatSliderChange } from '@angular/material';
 
 import { Store } from '@ngrx/store';
 
@@ -50,11 +50,11 @@ export class AppComponent implements OnInit {
     this.store.dispatch(new game.ResetGame());
   }
 
-  changeWidth(event: MdSliderChange) {
+  changeWidth(event: MatSliderChange) {
     this.store.dispatch(new game.ChangeWidth(event.value));
   }
 
-  changeHeight(event: MdSliderChange) {
+  changeHeight(event: MatSliderChange) {
     this.store.dispatch(new game.ChangeHeight(event.value));
   }
 }

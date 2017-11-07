@@ -3,7 +3,7 @@ import 'hammerjs';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { MdSidenavModule, MdListModule, MdSliderModule } from '@angular/material';
+import { MatSidenavModule, MatListModule, MatSliderModule } from '@angular/material';
 
 import { GameService } from './services/game.service';
 
@@ -19,7 +19,7 @@ import { NavItemComponent } from './components/nav-item';
 const COMPONENTS = [AppComponent, LayoutComponent, SidenavComponent, NavItemComponent];
 
 @NgModule({
-  imports: [CommonModule, MdSidenavModule, MdListModule, MdSliderModule, BoardModule],
+  imports: [CommonModule, MatSidenavModule, MatListModule, MatSliderModule, BoardModule],
   declarations: COMPONENTS,
   exports: COMPONENTS
 })
