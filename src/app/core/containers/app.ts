@@ -6,10 +6,6 @@ import { Store } from '@ngrx/store';
 import * as fromRoot from '../../reducers';
 import * as game from '../actions/game';
 
-function sizeToPixels(size: number): number {
-  return 10 * size + 4 * (size - 1);
-}
-
 @Component({
   selector: 'cgol-root',
   templateUrl: './app.html',
@@ -17,8 +13,8 @@ function sizeToPixels(size: number): number {
 })
 export class AppComponent implements OnInit {
   boardDimensions$ = this.store.select(fromRoot.getGameboardDimensions);
-  boardHeightInPixels$ = this.store.select(fromRoot.getHeight).map(sizeToPixels);
-  boardWidthInPixels$ = this.store.select(fromRoot.getWidth).map(sizeToPixels);
+  boardWidth$ = this.store.select(fromRoot.getWidth);
+  boardHeight$ = this.store.select(fromRoot.getHeight);
   gameboard$ = this.store.select(fromRoot.getFlattenedGameboard);
   isPlaying$ = this.store.select(fromRoot.getPlaying);
   generation$ = this.store.select(fromRoot.getGeneration);

@@ -3,16 +3,18 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'cgol-sidenav',
   template: `
-    <mat-sidenav mode="side" opened="true">
-      <mat-nav-list>
+      <ul>
         <ng-content></ng-content>
-      </mat-nav-list>
-    </mat-sidenav>
+      </ul>
   `,
   styles: [
     `
-    mat-sidenav {
-      width: 200px;
+    ul {
+      display: flex;
+      flex-direction: column;
+      margin: 0;
+      padding: 0;
+      list-style: none;
     }
   `
   ]

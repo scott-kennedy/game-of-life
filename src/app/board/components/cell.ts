@@ -4,11 +4,12 @@ import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'cgol-cell',
   template: `
-  <svg [attr.width]="size" [attr.height]="size">
+  <svg [attr.width]="'100%'" [attr.height]="'100%'">
     <rect
-      [attr.height]="size"
-      [attr.width]="size"
-      [attr.fill]="(isAlive ? '#32CD32' : '#ff0000')"></rect>
+      [attr.height]="'100%'"
+      [attr.width]="'100%'"
+      [attr.fill]="(isAlive ? '#4CAF50' : '#A1887F')"></rect>
+    </svg>
   `
 })
 export class CellComponent {

@@ -3,9 +3,7 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'cgol-layout',
   template: `
-    <mat-sidenav-container fullscreen>
-      <ng-content></ng-content>
-    </mat-sidenav-container>
+    <ng-content></ng-content>
   `
 })
 export class LayoutComponent {}

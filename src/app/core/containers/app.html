@@ -1,8 +1,6 @@
 <cgol-layout>
+  <div class="header">{{title}}</div>
   <cgol-sidenav>
-
-    <div>{{title}}</div>
-    <div>Generation: {{generation$ | async}}</div>
     <!-- Convert to buttons and use disable -->
     <cgol-nav-item (onClick)="startGame()">
       <span>Play</span>
@@ -29,7 +27,6 @@
     </cgol-nav-item>
   </cgol-sidenav>
 
-  <div class="main-content">
-    <cgol-board-page [gameboard]="gameboard$ | async" [cellSize]="10" [boardHeight]="boardHeightInPixels$ | async" [boardWidth]="boardWidthInPixels$ | async"></cgol-board-page>
-  </div>
+  <cgol-board-page [gameboard]="gameboard$ | async" [cellSize]="20" [boardWidth]="boardWidth$ | async" [boardHeight]="boardHeight$ | async"></cgol-board-page>
+  <div class="footer">Generation: {{generation$ | async}}</div>
 </cgol-layout>
