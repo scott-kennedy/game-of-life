@@ -7,8 +7,8 @@
   <cgol-board-page [gameboard]="gameboard$ | async" [boardWidth]="boardWidth$ | async" [boardHeight]="boardHeight$ | async"></cgol-board-page>
 
   <div class="footer">
-    <i class="material-icons" (click)="startGame()">play_arrow</i>
-    <i class="material-icons" (click)="pauseGame()">pause</i>
+    <i class="material-icons" (click)="startGame()" *ngIf="!(isPlaying$ | async)">play_arrow</i>
+    <i class="material-icons" (click)="pauseGame()" *ngIf="isPlaying$ | async">pause</i>
     <i class="material-icons" (click)="nextGameStep()">restore</i>
     <i class="material-icons" (click)="resetGame()">settings_backup_restore</i>
   </div>

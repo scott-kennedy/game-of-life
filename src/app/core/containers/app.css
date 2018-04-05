@@ -27,14 +27,4 @@ cgol-board-page {
 .footer {
   grid-area: footer;
   display: flex;
-  /* border: 1px solid black; */
-}
-
-.body-block {
-  grid-area: content;
-  width: 100%;
-  height: 70vh;
-  /* width: 800px;
-  height: 600px; */
-  background-color: blue;
 }

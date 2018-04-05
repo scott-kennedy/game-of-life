@@ -4,7 +4,7 @@ import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'cgol-board-page',
   template: `
-      <cgol-board [gameboard]="gameboard" [width]="boardWidth" [height]="boardHeight"></cgol-board>
+    <cgol-board [gameboard]="gameboard" [width]="boardWidth" [height]="boardHeight"></cgol-board>
   `
 })
 export class BoardPageComponent {
