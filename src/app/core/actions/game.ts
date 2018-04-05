@@ -11,6 +11,7 @@ export const NEXT_GAME_STEP = '[Game] Next Game Step';
 
 export const CHANGE_HEIGHT = '[Game] Change Height';
 export const CHANGE_WIDTH = '[Game] Change Width';
+export const TOGGLE_CELL = '[Game] Toggle Cell';
 
 export class InitializeGame implements Action {
   readonly type = INITIALIZE_GAME;
@@ -56,6 +57,11 @@ export class ChangeWidth implements Action {
   constructor(public payload: number) {}
 }
 
+export class ToggleCell implements Action {
+  readonly type = TOGGLE_CELL;
+  constructor(public payload: number) {}
+}
+
 export type Actions =
   | InitializeGame
   | GameLoaded
@@ -66,4 +72,5 @@ export type Actions =
   | GameInProgress
   | NextGameStep
   | ChangeHeight
-  | ChangeWidth;
+  | ChangeWidth
+  | ToggleCell;

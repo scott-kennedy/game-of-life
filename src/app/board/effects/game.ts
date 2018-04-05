@@ -69,6 +69,24 @@ export class GameEffects {
     .map(endOfGame => (endOfGame ? new game.GameCompleted() : new game.GameInProgress()))
     .catch(err => of(err));
 
+  @Effect()
+  toggleCell$ = this.actions$
+    .ofType<game.ToggleCell>(game.TOGGLE_CELL)
+    .switchMap((action: game.ToggleCell) =>
+      this.store
+        .select(fromRoot.getGameboard)
+        .take(1)
+        .map(currentGameboard => {
+          return {
+            gameboard: currentGameboard,
+            cellIndex: action.payload
+          };
+        })
+    )
+    .switchMap(data => this.gameService.toggleCell(data.gameboard, data.cellIndex))
+    .map(gameboard => new game.GameLoaded(gameboard))
+    .catch(err => of(err));
+
   constructor(
     private store: Store<fromRoot.State>,
     private gameService: GameService,
