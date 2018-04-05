@@ -1,32 +1,17 @@
 <cgol-layout>
-  <div class="header">{{title}}</div>
-  <cgol-sidenav>
-    <!-- Convert to buttons and use disable -->
-    <cgol-nav-item (onClick)="startGame()">
-      <span>Play</span>
-    </cgol-nav-item>
-    <cgol-nav-item (onClick)="pauseGame()">
-      <span>Pause</span>
-    </cgol-nav-item>
-    <cgol-nav-item (onClick)="nextGameStep()">
-      <span>Step</span>
-    </cgol-nav-item>
-    <cgol-nav-item (onClick)="resetGame()">
-      <span>Reset</span>
-    </cgol-nav-item>
-    <cgol-nav-item>
-      <span>Width</span>
-      <mat-slider [disabled]="isPlaying$ | async" (input)="changeWidth($event)" min="5" max="25" step="1" [value]="(boardDimensions$ | async).width"
-        thumbLabel tickInterval="5"></mat-slider>
-    </cgol-nav-item>
-    <cgol-nav-item>
-      <span>Height</span>
-      <!-- if playing then disable sliders -->
-      <mat-slider [disabled]="isPlaying$ | async" (input)="changeHeight($event)" min="5" max="25" step="1" [value]="(boardDimensions$ | async).height"
-        thumbLabel tickInterval="5"></mat-slider>
-    </cgol-nav-item>
-  </cgol-sidenav>
+  <div class="header">
+    <div class="title">{{title}}</div>
+    <div class="subtitle">Generation: {{generation$ | async}}</div>
+  </div>
 
+  <div class="body-block"></div>
+  <!--
   <cgol-board-page [gameboard]="gameboard$ | async" [cellSize]="20" [boardWidth]="boardWidth$ | async" [boardHeight]="boardHeight$ | async"></cgol-board-page>
-  <div class="footer">Generation: {{generation$ | async}}</div>
+  -->
+  <div class="footer">
+    <i class="material-icons">play_arrow</i>
+    <i class="material-icons">pause</i>
+    <i class="material-icons">restore</i>
+    <i class="material-icons">settings_backup_restore</i>
+  </div>
 </cgol-layout>
