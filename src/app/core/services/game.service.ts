@@ -51,6 +51,19 @@ export class GameService {
     return of(!hasLivingCells);
   }
 
+  toggleCell(gameboard, cellIndex): Observable<any> {
+    const nextGameboard = gameboard.map(boardRow => [...boardRow]);
+    const width = gameboard[0].length;
+
+    const row = Math.floor(cellIndex / width);
+    const col = cellIndex % width;
+    const cellIsAlive = nextGameboard[row][col];
+
+    nextGameboard[row][col] = cellIsAlive ? 0 : 1;
+
+    return of(nextGameboard);
+  }
+
   private countLivingNeighbors(row: number, col: number, board): number {
     // Simplified way of counting neighbors
     return (
