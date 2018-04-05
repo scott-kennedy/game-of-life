@@ -33,7 +33,7 @@ cgol-board-page {
 .body-block {
   grid-area: content;
   width: 100%;
-  height: 50vh;
+  height: 70vh;
   /* width: 800px;
   height: 600px; */
   background-color: blue;

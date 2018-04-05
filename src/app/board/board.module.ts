@@ -4,11 +4,11 @@ import { EffectsModule } from '@ngrx/effects';
 
 import { BoardPageComponent } from './containers/board-page';
 
-import { CellComponent } from './components/cell';
+import { BoardComponent } from './components/board';
 
 import { GameEffects } from './effects/game';
 
-const COMPONENTS = [BoardPageComponent, CellComponent];
+const COMPONENTS = [BoardPageComponent, BoardComponent];
 
 @NgModule({
   imports: [CommonModule, EffectsModule.forFeature([GameEffects])],
