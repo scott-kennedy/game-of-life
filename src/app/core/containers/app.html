@@ -1,16 +1,26 @@
 <cgol-layout>
-  <div class="header">
-    <div class="title">{{title}}</div>
-    <div class="subtitle">Generation: {{generation$ | async}}</div>
-  </div>
+  <header class="header">
+    <h1 class="title">{{title}}</h1>
+    <p class="subtitle">Generation: {{generation$ | async}}</p>
+  </header>
 
   <cgol-board-page [gameboard]="gameboard$ | async" [boardWidth]="boardWidth$ | async" [boardHeight]="boardHeight$ | async"></cgol-board-page>
 
-  <div class="footer">
-    <i title="Start game" class="material-icons md-36" (click)="startGame()" *ngIf="!(isPlaying$ | async)">play_arrow</i>
-    <i title="Pause" class="material-icons md-36" (click)="pauseGame()" *ngIf="isPlaying$ | async">pause</i>
-    <i title="Next Step" class="material-icons md-36" [class.md-inactive]="isPlaying$ | async" (click)="nextGameStep()">plus_one</i>
-    <!-- <i title="Next Step" class="material-icons md-36" (click)="nextGameStep()">restore</i> -->
-    <i title="Reset" class="material-icons md-36" (click)="resetGame()">settings_backup_restore</i>
-  </div>
+  <footer class="footer">
+    <button (click)="startGame()" *ngIf="!(isPlaying$ | async)">
+      <i title="Start game" class="material-icons md-36">play_arrow</i>
+    </button>
+
+    <button (click)="pauseGame()" *ngIf="isPlaying$ | async">
+      <i title="Pause" class="material-icons md-36">pause</i>
+    </button>
+
+    <button (click)="nextGameStep()" [class.md-inactive]="isPlaying$ | async" [disabled]="isPlaying$ | async">
+      <i title="Next Step" class="material-icons md-36">plus_one</i>
+    </button>
+
+    <button (click)="resetGame()">
+      <i title="Reset" class="material-icons md-36">settings_backup_restore</i>
+    </button>
+  </footer>
 </cgol-layout>
