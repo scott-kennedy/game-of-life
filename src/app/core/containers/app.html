@@ -1,32 +1,26 @@
 <cgol-layout>
-  <div class="header">{{title}}</div>
-  <cgol-sidenav>
-    <!-- Convert to buttons and use disable -->
-    <cgol-nav-item (onClick)="startGame()">
-      <span>Play</span>
-    </cgol-nav-item>
-    <cgol-nav-item (onClick)="pauseGame()">
-      <span>Pause</span>
-    </cgol-nav-item>
-    <cgol-nav-item (onClick)="nextGameStep()">
-      <span>Step</span>
-    </cgol-nav-item>
-    <cgol-nav-item (onClick)="resetGame()">
-      <span>Reset</span>
-    </cgol-nav-item>
-    <cgol-nav-item>
-      <span>Width</span>
-      <mat-slider [disabled]="isPlaying$ | async" (input)="changeWidth($event)" min="5" max="25" step="1" [value]="(boardDimensions$ | async).width"
-        thumbLabel tickInterval="5"></mat-slider>
-    </cgol-nav-item>
-    <cgol-nav-item>
-      <span>Height</span>
-      <!-- if playing then disable sliders -->
-      <mat-slider [disabled]="isPlaying$ | async" (input)="changeHeight($event)" min="5" max="25" step="1" [value]="(boardDimensions$ | async).height"
-        thumbLabel tickInterval="5"></mat-slider>
-    </cgol-nav-item>
-  </cgol-sidenav>
+  <header class="header">
+    <h1 class="title">{{title}}</h1>
+    <p class="subtitle">Generation: {{generation$ | async}}</p>
+  </header>
 
-  <cgol-board-page [gameboard]="gameboard$ | async" [cellSize]="20" [boardWidth]="boardWidth$ | async" [boardHeight]="boardHeight$ | async"></cgol-board-page>
-  <div class="footer">Generation: {{generation$ | async}}</div>
+  <cgol-board-page [gameboard]="gameboard$ | async" [boardWidth]="boardWidth$ | async" [boardHeight]="boardHeight$ | async"></cgol-board-page>
+
+  <footer class="footer">
+    <button (click)="startGame()" *ngIf="!(isPlaying$ | async)">
+      <i title="Start game" class="material-icons md-36">play_arrow</i>
+    </button>
+
+    <button (click)="pauseGame()" *ngIf="isPlaying$ | async">
+      <i title="Pause" class="material-icons md-36">pause</i>
+    </button>
+
+    <button (click)="nextGameStep()" [class.md-inactive]="isPlaying$ | async" [disabled]="isPlaying$ | async">
+      <i title="Next Step" class="material-icons md-36">plus_one</i>
+    </button>
+
+    <button (click)="resetGame()">
+      <i title="Reset" class="material-icons md-36">settings_backup_restore</i>
+    </button>
+  </footer>
 </cgol-layout>
