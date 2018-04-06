@@ -21,6 +21,10 @@ cgol-board-page {
   grid-area: content;
 }
 
+cgol-dimensions {
+  display: flex;
+}
+
 .footer {
   width: 50%;
   grid-area: footer;

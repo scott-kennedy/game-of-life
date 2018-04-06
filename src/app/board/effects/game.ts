@@ -55,7 +55,6 @@ export class GameEffects {
   resizeGameboard$ = this.actions$
     .ofType<game.ResetGame>(game.CHANGE_HEIGHT, game.CHANGE_WIDTH)
     .switchMap(() => this.store.select(fromRoot.getGameboardDimensions).take(1))
-    // right now resizing adds/removes live cells, do we want to do that or do we want static?
     .switchMap(size => this.gameService.buildNewGameboard(size.width, size.height))
     .map(gameboard => new game.GameLoaded(gameboard))
     .catch(err => of(err));

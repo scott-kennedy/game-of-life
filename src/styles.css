@@ -55,3 +55,29 @@ button.md-inactive:hover {
 }
 
 .md-inactive { color: rgba(0, 0, 0, 0.26) !important; cursor: initial !important; }
+
+input[type="number"] {
+  margin-bottom: 1.5rem;
+  height: 38px;
+  padding: 6px 10px; /* The 6px vertically centers text on FF, ignored by Webkit */
+  background-color: #fff;
+  border: 1px solid #D1D1D1;
+  border-radius: 4px;
+  box-shadow: none;
+  box-sizing: border-box;
+
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+input[type="number"]:focus {
+  border: 1px solid #33C3F0;
+  outline: 0;
+}
+
+label {
+  display: block;
+  margin-bottom: .5rem;
+  font-weight: 600;
+}
