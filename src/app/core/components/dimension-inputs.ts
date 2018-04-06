@@ -5,15 +5,15 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
   template: `
   <input name="width"
     type="number"
-    min="1"
-    max="100"
+    [attr.min]="validations.width.min"
+    [attr.max]="validations.width.max"
     (change)="changeWidth($event)"
     (keyup)="changeWidth($event)"
     [value]="width">
 <input name="height"
     type="number"
-    min="1"
-    max="100"
+    [attr.min]="validations.height.min"
+    [attr.max]="validations.height.max"
     (change)="changeHeight($event)"
     (keyup)="changeHeight($event)"
     [value]="height">
@@ -24,22 +24,53 @@ export class DimensionsComponent {
   @Input() height: number;
   @Output() onChangeWidth = new EventEmitter();
   @Output() onChangeHeight = new EventEmitter();
+  validations = {
+    width: {
+      min: 5,
+      max: 100
+    },
+    height: {
+      min: 5,
+      max: 100
+    }
+  };
 
   constructor() {}
 
   changeWidth(event: KeyboardEvent) {
-    const inputValue = (<HTMLInputElement>event.target).value;
-    if (!inputValue) {
-      return;
+    let value = (<HTMLInputElement>event.target).value;
+    value = this.validateInput('width', value);
+
+    if (value) {
+      this.onChangeWidth.emit(value);
     }
-    this.onChangeWidth.emit(inputValue);
   }
 
   changeHeight(event: KeyboardEvent) {
-    const inputValue = (<HTMLInputElement>event.target).value;
-    if (!inputValue) {
-      return;
+    let value = (<HTMLInputElement>event.target).value;
+    value = this.validateInput('height', value);
+
+    if (value) {
+      this.onChangeHeight.emit(value);
     }
-    this.onChangeHeight.emit(inputValue);
+  }
+
+  // TODO Convert validateInput into proper validator
+  validateInput(field, value) {
+    const inputValue = parseInt(value, 10);
+    const inputLimits = this.validations[field];
+
+    if (!inputValue || isNaN(inputValue)) {
+      return false;
+    }
+
+    if (inputValue < inputLimits.min) {
+      console.log('Returning minimum');
+      return inputLimits.min;
+    } else if (inputValue > inputLimits.max) {
+      return inputLimits.max;
+    }
+
+    return inputValue;
   }
 }
