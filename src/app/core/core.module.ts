@@ -15,8 +15,15 @@ import { BoardModule } from '../board/board.module';
 import { LayoutComponent } from './components/layout';
 import { SidenavComponent } from './components/sidenav';
 import { NavItemComponent } from './components/nav-item';
+import { DimensionsComponent } from './components/dimension-inputs';
 
-const COMPONENTS = [AppComponent, LayoutComponent, SidenavComponent, NavItemComponent];
+const COMPONENTS = [
+  AppComponent,
+  LayoutComponent,
+  SidenavComponent,
+  NavItemComponent,
+  DimensionsComponent
+];
 
 @NgModule({
   imports: [CommonModule, MatSidenavModule, MatListModule, MatSliderModule, BoardModule],

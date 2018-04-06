@@ -22,5 +22,7 @@
     <button (click)="resetGame()">
       <i title="Reset" class="material-icons md-36">settings_backup_restore</i>
     </button>
+
+    <cgol-dimensions [width]="boardWidth$ | async" [height]="boardHeight$ | async" (onChangeWidth)="changeWidth($event)" (onChangeHeight)="changeHeight($event)"></cgol-dimensions>
   </footer>
 </cgol-layout>

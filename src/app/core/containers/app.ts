@@ -46,11 +46,12 @@ export class AppComponent implements OnInit {
     this.store.dispatch(new game.ResetGame());
   }
 
-  changeWidth(event: MatSliderChange) {
-    this.store.dispatch(new game.ChangeWidth(event.value));
+  changeWidth(value) {
+    console.log('Trying to change value to:', value);
+    this.store.dispatch(new game.ChangeWidth(+value));
   }
 
-  changeHeight(event: MatSliderChange) {
-    this.store.dispatch(new game.ChangeHeight(event.value));
+  changeHeight(value) {
+    this.store.dispatch(new game.ChangeHeight(+value));
   }
 }
