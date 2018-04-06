@@ -47,7 +47,6 @@ export class AppComponent implements OnInit {
   }
 
   changeWidth(value) {
-    console.log('Trying to change value to:', value);
     this.store.dispatch(new game.ChangeWidth(+value));
   }
 

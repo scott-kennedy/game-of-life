@@ -4,7 +4,9 @@ import {
   Output,
   EventEmitter,
   ChangeDetectionStrategy,
-  OnInit
+  OnInit,
+  OnChanges,
+  SimpleChanges
 } from '@angular/core';
 
 @Component({
@@ -12,31 +14,85 @@ import {
   selector: 'cgol-board',
   template: `
     <svg width="800px" height="600px">
-      <rect *ngFor="let cell of gameboard; let i=index"
-        stroke="black"
-        [attr.width]="getCellWidth()"
-        [attr.height]="getCellHeight()"
-        [attr.x]="getXOffsetFromIndex(i) + 'px'"
-        [attr.y]="getYOffsetFromIndex(i) + 'px'"
-        [attr.fill]="(cell ? '#4CAF50' : '#fff')"
-        (click)="onCellClick(i)"></rect>
+      <svg:g cgol-cell *ngFor="let cell of cells" [cell]="cell"></svg:g>
     </svg>
   `
 })
-export class BoardComponent {
+export class BoardComponent implements OnInit, OnChanges {
   @Input() gameboard;
   @Input() width: number;
   @Input() height: number;
   @Output() onClickCell = new EventEmitter();
+  cellWidth: number;
+  cellHeight: number;
+  cells: any[];
 
   constructor() {}
 
+  ngOnInit() {
+    this.setCellWidth();
+    this.setCellHeight();
+    this.buildCells();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    let rebuildCells = false;
+
+    if (changes.width) {
+      this.setCellWidth();
+      rebuildCells = true;
+    }
+
+    if (changes.height) {
+      this.setCellHeight();
+      rebuildCells = true;
+    }
+
+    if (rebuildCells) {
+      this.buildCells();
+    }
+
+    if (changes.gameboard) {
+      this.updateCells(changes.gameboard.currentValue);
+    }
+  }
+
+  // TODO cell building is a candidate to move to store
+  buildCells() {
+    const maxCells = this.width * this.height;
+    this.cells = [];
+    for (let i = 0; i < maxCells; i++) {
+      const cell = {
+        id: i,
+        width: this.cellWidth,
+        height: this.cellHeight,
+        x: this.getXOffsetFromIndex(i),
+        y: this.getYOffsetFromIndex(i),
+        isAlive: this.gameboard[i]
+      };
+
+      this.cells.push(cell);
+    }
+  }
+
+  // TODO cell updating is a candidate to move to store
+  updateCells(gameboard: any[]) {
+    const size = gameboard.length;
+    for (let i = 0; i < size; i++) {
+      const currentCell = this.cells[i];
+      const cellChanged = gameboard[i] !== currentCell.isAlive;
+      if (cellChanged) {
+        this.cells[i] = Object.assign({}, this.cells[i], { isAlive: gameboard[i] });
+      }
+    }
+  }
+
   getXOffsetFromIndex(index) {
-    return this.getCellWidth() * (index % this.width);
+    return this.cellWidth * (index % this.width);
   }
 
   getYOffsetFromIndex(index) {
-    return this.getCellHeight() * Math.floor(index / this.width);
+    return this.cellHeight * Math.floor(index / this.width);
   }
 
   onCellClick(index) {
@@ -49,5 +105,13 @@ export class BoardComponent {
 
   getCellHeight() {
     return 600 / this.height;
+  }
+
+  setCellWidth() {
+    this.cellWidth = 800 / this.width;
+  }
+
+  setCellHeight() {
+    this.cellHeight = 600 / this.height;
   }
 }

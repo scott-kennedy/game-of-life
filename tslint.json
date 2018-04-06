@@ -132,7 +132,7 @@
     ],
     "component-selector": [
       true,
-      "element",
+      ["attribute", "element"],
       "cgol",
       "kebab-case"
     ],
