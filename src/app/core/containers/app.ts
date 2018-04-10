@@ -26,24 +26,24 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     // Rather than subscribe dispatch an action to init the board
     this.boardDimensions$.take(1).subscribe(dimensions => {
-      this.store.dispatch(new game.InitializeGame(dimensions));
+      this.store.dispatch(new game.Initialize(dimensions));
     });
   }
 
   startGame() {
-    this.store.dispatch(new game.StartGame());
+    this.store.dispatch(new game.Start());
   }
 
   pauseGame() {
-    this.store.dispatch(new game.PauseGame());
+    this.store.dispatch(new game.Pause());
   }
 
   nextGameStep() {
-    this.store.dispatch(new game.NextGameStep());
+    this.store.dispatch(new game.NextGeneration());
   }
 
   resetGame() {
-    this.store.dispatch(new game.ResetGame());
+    this.store.dispatch(new game.Reset());
   }
 
   changeWidth(value) {

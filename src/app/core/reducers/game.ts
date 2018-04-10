@@ -1,8 +1,7 @@
 import * as game from '../actions/game';
 
 export interface State {
-  playing: boolean;
-  completed: boolean;
+  status: string;
   generation: number;
   height: number;
   width: number;
@@ -10,8 +9,7 @@ export interface State {
 }
 
 const initialState: State = {
-  playing: false,
-  completed: false,
+  status: '',
   generation: 0,
   height: 10,
   width: 10,
@@ -20,45 +18,52 @@ const initialState: State = {
 
 export function reducer(state = initialState, action: game.Actions): State {
   switch (action.type) {
-    case game.GAME_LOADED:
+    case game.INITIALIZE_SUCCESS:
       return {
         ...state,
         gameboard: action.payload
       };
-    case game.START_GAME:
+
+    case game.GAME_OVER:
       return {
         ...state,
-        playing: true
+        gameboard: action.payload,
+        status: 'complete'
       };
 
-    case game.PAUSE_GAME:
+    case game.TOGGLE_CELL_SUCCESS: {
       return {
         ...state,
-        playing: false
-      };
-
-    case game.RESET_GAME:
-      return initialState;
-
-    case game.GAME_COMPLETED:
-      return {
-        ...state,
-        completed: true,
-        playing: false
-      };
-
-    case game.NEXT_GAME_STEP:
-      return {
-        ...state,
-        generation: state.generation + 1
-      };
-
-    case game.CHANGE_HEIGHT: {
-      return {
-        ...state,
-        height: action.payload
+        gameboard: action.payload
       };
     }
+
+    case game.START:
+    case game.START_SUCCESS:
+      return {
+        ...state,
+        status: 'playing'
+      };
+
+    case game.PAUSE:
+      return {
+        ...state,
+        status: 'paused'
+      };
+
+    // Intentionally resets height/width
+    case game.RESET_SUCCESS:
+      return {
+        ...initialState,
+        gameboard: action.payload
+      };
+
+    case game.NEXT_SUCCESS:
+      return {
+        ...state,
+        generation: state.generation + 1,
+        gameboard: action.payload
+      };
 
     case game.CHANGE_WIDTH: {
       return {
@@ -67,13 +72,27 @@ export function reducer(state = initialState, action: game.Actions): State {
       };
     }
 
+    case game.CHANGE_HEIGHT: {
+      return {
+        ...state,
+        height: action.payload
+      };
+    }
+
+    case game.CHANGE_DIMENSIONS_SUCCESS: {
+      return {
+        ...state,
+        gameboard: action.payload
+      };
+    }
+
     default:
       return state;
   }
 }
 
-export const getPlaying = (state: State) => state.playing;
-export const getCompleted = (state: State) => state.completed;
+export const getPlaying = (state: State) => state.status === 'playing';
+export const getCompleted = (state: State) => state.status === 'complete';
 export const getGameboard = (state: State) => state.gameboard;
 export const getGeneration = (state: State) => state.generation;
 export const getHeight = (state: State) => state.height;

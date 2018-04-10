@@ -51,7 +51,7 @@ export function logger(reducer: ActionReducer<State>): ActionReducer<State> {
   };
 }
 export const metaReducers: MetaReducer<State>[] = !environment.production
-  ? [] // add [logger, storeFreeze] if desired
+  ? [logger, storeFreeze]
   : [];
 
 export const selectGameState = createFeatureSelector<fromGame.State>('game');

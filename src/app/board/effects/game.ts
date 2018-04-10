@@ -20,52 +20,52 @@ import { GameService } from '../../core/services/game.service';
 export class GameEffects {
   @Effect()
   gameSetup$ = this.actions$
-    .ofType<game.InitializeGame>(game.INITIALIZE_GAME)
-    .map(action => action.payload)
+    .ofType(game.INITIALIZE)
+    .map((action: game.Initialize) => action.payload)
     .switchMap(size => this.gameService.buildNewGameboard(size.width, size.height))
-    .map(gameboard => new game.GameLoaded(gameboard))
+    .map(gameboard => new game.InitializeSuccess(gameboard))
     .catch(err => of(err));
+
+  @Effect()
+  tick$ = this.actions$.ofType(game.START).switchMap(() => {
+    return interval(500)
+      .switchMap(() => this.store.select(fromRoot.getPlaying).take(1))
+      .takeWhile(isPlaying => isPlaying)
+      .mapTo(new game.NextGeneration());
+  });
 
   @Effect()
   resetGameboard$ = this.actions$
-    .ofType<game.ResetGame>(game.RESET_GAME)
+    .ofType(game.RESET)
     .switchMap(() => this.store.select(fromRoot.getGameboardDimensions).take(1))
     .switchMap(size => this.gameService.buildNewGameboard(size.width, size.height))
-    .map(gameboard => new game.GameLoaded(gameboard))
-    .catch(err => of(err));
-
-  @Effect()
-  startGameplay$ = this.actions$
-    .switchMap(() => this.store.select(fromRoot.getPlaying).take(1))
-    .switchMap(isPlaying => {
-      return interval(500)
-        .takeWhile(() => isPlaying)
-        .mapTo(new game.NextGameStep());
-    });
+    .map(board => new game.ResetSuccess(board))
+    .catch(err => of(err).mapTo(new game.ResetFailure()));
 
   @Effect()
   getNextGeneration$ = this.actions$
-    .ofType<game.ResetGame>(game.NEXT_GAME_STEP)
+    .ofType(game.NEXT)
     .switchMap(() => this.store.select(fromRoot.getGameboard).take(1))
     .switchMap(gameboard => this.gameService.getNextGeneration(gameboard))
-    .map(nextGameboard => new game.GameLoaded(nextGameboard))
+    .switchMap(gameboard =>
+      this.gameService.checkGameEnded(gameboard).map(isGameOver => {
+        if (isGameOver) {
+          return new game.GameOver(gameboard);
+        } else {
+          return new game.NextSuccess(gameboard);
+        }
+      })
+    )
     .catch(err => of(err));
 
   @Effect()
   resizeGameboard$ = this.actions$
-    .ofType<game.ResetGame>(game.CHANGE_HEIGHT, game.CHANGE_WIDTH)
+    .ofType(game.CHANGE_WIDTH, game.CHANGE_HEIGHT)
     .switchMap(() => this.store.select(fromRoot.getGameboardDimensions).take(1))
-    .switchMap(size => this.gameService.buildNewGameboard(size.width, size.height))
-    .map(gameboard => new game.GameLoaded(gameboard))
-    .catch(err => of(err));
-
-  @Effect()
-  checkEndConditions$ = this.actions$
-    .ofType<game.ResetGame>(game.GAME_LOADED)
-    .switchMap(() => this.store.select(fromRoot.getGameboard).take(1))
-    .switchMap(gameboard => this.gameService.checkGameEnded(gameboard))
-    // We could combine these into a single action, GameStatus and pass a payload
-    .map(endOfGame => (endOfGame ? new game.GameCompleted() : new game.GameInProgress()))
+    .switchMap(dimensions =>
+      this.gameService.buildNewGameboard(dimensions.width, dimensions.height)
+    )
+    .map(gameboard => new game.ChangeDimensionsSuccess(gameboard))
     .catch(err => of(err));
 
   @Effect()
@@ -83,7 +83,7 @@ export class GameEffects {
         })
     )
     .switchMap(data => this.gameService.toggleCell(data.gameboard, data.cellIndex))
-    .map(gameboard => new game.GameLoaded(gameboard))
+    .map(gameboard => new game.ToggleCellSuccess(gameboard))
     .catch(err => of(err));
 
   constructor(

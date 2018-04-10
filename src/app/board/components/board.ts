@@ -13,7 +13,7 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'cgol-board',
   template: `
-    <svg width="800px" height="600px">
+    <svg width="800px" height="600px" (click)="onCellClick($event)">
       <svg:g cgol-cell *ngFor="let cell of cells" [cell]="cell"></svg:g>
     </svg>
   `
@@ -95,8 +95,11 @@ export class BoardComponent implements OnInit, OnChanges {
     return this.cellHeight * Math.floor(index / this.width);
   }
 
-  onCellClick(index) {
-    this.onClickCell.emit(index);
+  onCellClick(event) {
+    const cellId = event.target.getAttribute('dataId');
+    if (cellId) {
+      this.onClickCell.emit(cellId);
+    }
   }
 
   getCellWidth() {

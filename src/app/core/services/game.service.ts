@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
+import { interval } from 'rxjs/observable/interval';
 
 /* Rules:
  *  Any live cell with fewer than two live neighbours dies, as if caused by underpopulation.
