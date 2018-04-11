@@ -12,6 +12,7 @@ import * as game from '../../core/actions/game';
     <cgol-board [gameboard]="gameboard"
       [width]="boardWidth"
       [height]="boardHeight"
+      [viewportSize]="viewportSize"
       (onClickCell)="handleClick($event)"></cgol-board>
   `
 })
@@ -19,6 +20,7 @@ export class BoardPageComponent {
   @Input() gameboard;
   @Input() boardHeight;
   @Input() boardWidth;
+  @Input() viewportSize;
 
   constructor(private store: Store<fromRoot.State>) {}
 

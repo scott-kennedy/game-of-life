@@ -13,7 +13,10 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'cgol-board',
   template: `
-    <svg width="800px" height="600px" (click)="onCellClick($event)">
+    <svg
+      [attr.width]="viewportSize.width"
+      [attr.height]="viewportSize.height"
+      (click)="onCellClick($event)">
       <svg:g cgol-cell *ngFor="let cell of cells" [cell]="cell"></svg:g>
     </svg>
   `
@@ -22,6 +25,8 @@ export class BoardComponent implements OnInit, OnChanges {
   @Input() gameboard;
   @Input() width: number;
   @Input() height: number;
+  @Input() viewportSize;
+
   @Output() onClickCell = new EventEmitter();
   cellWidth: number;
   cellHeight: number;
@@ -38,12 +43,12 @@ export class BoardComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     let rebuildCells = false;
 
-    if (changes.width) {
+    if (changes.width || changes.viewportSize) {
       this.setCellWidth();
       rebuildCells = true;
     }
 
-    if (changes.height) {
+    if (changes.height || changes.viewportSize) {
       this.setCellHeight();
       rebuildCells = true;
     }
@@ -103,18 +108,18 @@ export class BoardComponent implements OnInit, OnChanges {
   }
 
   getCellWidth() {
-    return 800 / this.width;
+    return this.viewportSize.width / this.width;
   }
 
   getCellHeight() {
-    return 600 / this.height;
+    return this.viewportSize.height / this.height;
   }
 
   setCellWidth() {
-    this.cellWidth = 800 / this.width;
+    this.cellWidth = this.viewportSize.width / this.width;
   }
 
   setCellHeight() {
-    this.cellHeight = 600 / this.height;
+    this.cellHeight = this.viewportSize.height / this.height;
   }
 }

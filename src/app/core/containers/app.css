@@ -1,24 +1,52 @@
-cgol-layout {
+/* cgol-layout {
   display: grid;
   grid-gap: 1em;
   grid-template-areas: ". header ."
     ". content ."
-    ". footer .";
-  grid-template-columns: auto 800px auto;
-  grid-template-rows: 10vh 70vh auto;
+    ". footer ."; */
+  /* grid-template-columns: auto 800px auto; */
+  /* grid-template-rows: 10vh 70vh auto; */
+  /* grid-template-columns: 200px 1fr 200px;
+  grid-template-rows: auto 1fr auto;
+  height: 100vh;
   justify-items: center;
+} */
+
+cgol-layout {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-.header {
-  grid-area: header;
+@media (min-width: 768px) {
+  cgol-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 100px) 1fr minmax(0, 100px);
+    grid-template-rows: auto 1fr auto;
+    justify-items: center;
+  }
 }
 
-cgol-sidenav {
-  grid-area: sidebar;
-}
+/* grid-areas need to be defined in a single media query */
+@media (min-width: 768px) {
+  cgol-layout {
+    grid-template-areas: ". header ."
+    ". content ."
+    ". footer .";
+  }
 
-cgol-board-page {
-  grid-area: content;
+  .header {
+    grid-area: header;
+  }
+  
+  cgol-board-page {
+    grid-area: content;
+  }
+  
+  .footer {
+    grid-area: footer;
+  }
 }
 
 cgol-dimensions {
@@ -26,10 +54,14 @@ cgol-dimensions {
 }
 
 .footer {
-  width: 50%;
-  grid-area: footer;
   display: flex;
   justify-content: space-between;
+}
+
+@media (min-width: 768px) {
+  .footer {
+    width: 50%;
+  }
 }
 
 .material-icons.md-36 { font-size: 36px; }

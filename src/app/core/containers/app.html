@@ -4,7 +4,8 @@
     <p class="subtitle">Generation: {{generation$ | async}}</p>
   </header>
 
-  <cgol-board-page [gameboard]="gameboard$ | async" [boardWidth]="boardWidth$ | async" [boardHeight]="boardHeight$ | async"></cgol-board-page>
+  <cgol-board-page [gameboard]="gameboard$ | async" [boardWidth]="boardWidth$ | async" [boardHeight]="boardHeight$ | async"
+    [viewportSize]="viewportSize"></cgol-board-page>
 
   <footer class="footer">
     <button (click)="startGame()" *ngIf="!(isPlaying$ | async)">
@@ -23,6 +24,7 @@
       <i title="Reset" class="material-icons md-36">settings_backup_restore</i>
     </button>
 
-    <cgol-dimensions [width]="boardWidth$ | async" [height]="boardHeight$ | async" [disableInputs]="isPlaying$ | async" (onChangeWidth)="changeWidth($event)" (onChangeHeight)="changeHeight($event)"></cgol-dimensions>
+    <cgol-dimensions [width]="boardWidth$ | async" [height]="boardHeight$ | async" [disableInputs]="isPlaying$ | async" (onChangeWidth)="changeWidth($event)"
+      (onChangeHeight)="changeHeight($event)"></cgol-dimensions>
   </footer>
 </cgol-layout>
