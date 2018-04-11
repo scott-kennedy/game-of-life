@@ -31,11 +31,11 @@ export class DimensionsComponent {
   validations = {
     width: {
       min: 5,
-      max: 100
+      max: 50
     },
     height: {
       min: 5,
-      max: 100
+      max: 50
     }
   };
 
