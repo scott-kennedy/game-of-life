@@ -5,12 +5,16 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
   template: `
   <input name="width"
     type="number"
+    [disabled]="disableInputs"
+    [class.md-inactive]="disableInputs"
     [attr.min]="validations.width.min"
     [attr.max]="validations.width.max"
     [ngModel]="width"
     (ngModelChange)="changeWidth($event)">
-<input name="height"
+  <input name="height"
     type="number"
+    [disabled]="disableInputs"
+    [class.md-inactive]="disableInputs"
     [attr.min]="validations.height.min"
     [attr.max]="validations.height.max"
     [ngModel]="height"
@@ -20,6 +24,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 export class DimensionsComponent {
   @Input() width: number;
   @Input() height: number;
+  @Input() disableInputs: boolean;
   @Output() onChangeWidth = new EventEmitter();
   @Output() onChangeHeight = new EventEmitter();
 
