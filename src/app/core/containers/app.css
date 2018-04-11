@@ -51,27 +51,33 @@ cgol-layout {
 
 cgol-dimensions {
   display: flex;
+  justify-content: space-evenly;
 }
 
 .footer {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  justify-content: space-evenly;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 550px) {
   .footer {
-    width: 50%;
+    flex-direction: row;
   }
 }
 
 .material-icons.md-36 { font-size: 36px; }
+
+.title,
+.subtitle {
+  text-align: center;
+}
 
 .subtitle {
   margin: 0;
   font-size: 1.8rem;
   line-height: 1.5;
   letter-spacing: -.05rem;
-  text-align: center;
 }
 
 @media (min-width: 550px) {

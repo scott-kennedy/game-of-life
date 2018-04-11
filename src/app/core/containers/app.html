@@ -7,7 +7,7 @@
   <cgol-board-page [gameboard]="gameboard$ | async" [boardWidth]="boardWidth$ | async" [boardHeight]="boardHeight$ | async"
     [viewportSize]="viewportSize"></cgol-board-page>
 
-  <footer class="footer">
+  <footer class="footer" [style.width.px]="viewportSize.width">
     <button (click)="startGame()" *ngIf="!(isPlaying$ | async)">
       <i title="Start game" class="material-icons md-36">play_arrow</i>
     </button>
