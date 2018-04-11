@@ -7,16 +7,14 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
     type="number"
     [attr.min]="validations.width.min"
     [attr.max]="validations.width.max"
-    (change)="changeWidth($event)"
-    (keyup)="changeWidth($event)"
-    [value]="width">
+    [ngModel]="width"
+    (ngModelChange)="changeWidth($event)">
 <input name="height"
     type="number"
     [attr.min]="validations.height.min"
     [attr.max]="validations.height.max"
-    (change)="changeHeight($event)"
-    (keyup)="changeHeight($event)"
-    [value]="height">
+    [ngModel]="height"
+    (ngModelChange)="changeHeight($event)">
   `
 })
 export class DimensionsComponent {
@@ -24,6 +22,7 @@ export class DimensionsComponent {
   @Input() height: number;
   @Output() onChangeWidth = new EventEmitter();
   @Output() onChangeHeight = new EventEmitter();
+
   validations = {
     width: {
       min: 5,
@@ -37,8 +36,7 @@ export class DimensionsComponent {
 
   constructor() {}
 
-  changeWidth(event: KeyboardEvent) {
-    let value = (<HTMLInputElement>event.target).value;
+  changeWidth(value: number): void {
     value = this.validateInput('width', value);
 
     if (value) {
@@ -46,8 +44,7 @@ export class DimensionsComponent {
     }
   }
 
-  changeHeight(event: KeyboardEvent) {
-    let value = (<HTMLInputElement>event.target).value;
+  changeHeight(value: number): void {
     value = this.validateInput('height', value);
 
     if (value) {
@@ -56,16 +53,22 @@ export class DimensionsComponent {
   }
 
   // TODO Convert validateInput into proper validator
-  validateInput(field, value) {
+  // TODO Debounce input could make the input smoother but not true real-time
+  validateInput(field, value): number {
     const inputValue = parseInt(value, 10);
     const inputLimits = this.validations[field];
 
     if (!inputValue || isNaN(inputValue)) {
-      return false;
+      return null;
+    }
+
+    // Still do unnecessary update when you use an invalid value, ex: 2 is below the minimum of 5 so
+    // 2 !== 5 even though we return 5 from this function.
+    if (this[field] === value) {
+      return null;
     }
 
     if (inputValue < inputLimits.min) {
-      console.log('Returning minimum');
       return inputLimits.min;
     } else if (inputValue > inputLimits.max) {
       return inputLimits.max;

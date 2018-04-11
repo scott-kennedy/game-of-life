@@ -2,8 +2,7 @@ import 'hammerjs';
 
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-import { MatSidenavModule, MatListModule, MatSliderModule } from '@angular/material';
+import { FormsModule } from '@angular/forms';
 
 import { GameService } from './services/game.service';
 
@@ -26,7 +25,7 @@ const COMPONENTS = [
 ];
 
 @NgModule({
-  imports: [CommonModule, MatSidenavModule, MatListModule, MatSliderModule, BoardModule],
+  imports: [CommonModule, FormsModule, BoardModule],
   declarations: COMPONENTS,
   exports: COMPONENTS
 })
