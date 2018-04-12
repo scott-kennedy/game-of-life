@@ -1,5 +1,7 @@
 import { Action } from '@ngrx/store';
 
+import { Gameboard } from '../models/gameboard';
+
 export const INITIALIZE = '[Game] Initialize';
 export const INITIALIZE_SUCCESS = '[Game] Initialize Success';
 export const INITIALIZE_FAILURE = '[Game] Initialize Failure';
@@ -42,7 +44,7 @@ export class Initialize implements Action {
 
 export class InitializeSuccess implements Action {
   readonly type = INITIALIZE_SUCCESS;
-  constructor(public payload: any) {}
+  constructor(public payload: Gameboard) {}
 }
 
 export class InitializeFailure implements Action {
@@ -74,7 +76,7 @@ export class Reset implements Action {
 }
 export class ResetSuccess implements Action {
   readonly type = RESET_SUCCESS;
-  constructor(public payload: any) {}
+  constructor(public payload: Gameboard) {}
 }
 export class ResetFailure implements Action {
   readonly type = RESET_FAILURE;
@@ -85,7 +87,7 @@ export class NextGeneration implements Action {
 }
 export class NextSuccess implements Action {
   readonly type = NEXT_SUCCESS;
-  constructor(public payload: any) {}
+  constructor(public payload: Gameboard) {}
 }
 export class NextFailure implements Action {
   readonly type = NEXT;
@@ -93,7 +95,7 @@ export class NextFailure implements Action {
 
 export class GameOver implements Action {
   readonly type = GAME_OVER;
-  constructor(public payload: any) {}
+  constructor(public payload: Gameboard) {}
 }
 
 export class ChangeHeight implements Action {
@@ -106,7 +108,7 @@ export class ChangeWidth implements Action {
 }
 export class ChangeDimensionsSuccess implements Action {
   readonly type = CHANGE_DIMENSIONS_SUCCESS;
-  constructor(public payload: any) {}
+  constructor(public payload: Gameboard) {}
 }
 export class ChangeDimensionsFailure implements Action {
   readonly type = CHANGE_DIMENSIONS_FAILURE;
@@ -118,7 +120,7 @@ export class ToggleCell implements Action {
 }
 export class ToggleCellSuccess implements Action {
   readonly type = TOGGLE_CELL_SUCCESS;
-  constructor(public payload: any) {}
+  constructor(public payload: Gameboard) {}
 }
 export class ToggleCellFailure implements Action {
   readonly type = TOGGLE_CELL_FAILURE;

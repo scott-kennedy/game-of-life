@@ -1,11 +1,13 @@
 import * as game from '../actions/game';
 
+import { Gameboard } from '../models/gameboard';
+
 export interface State {
   status: string;
   generation: number;
   height: number;
   width: number;
-  gameboard: any;
+  gameboard: Gameboard;
 }
 
 const initialState: State = {

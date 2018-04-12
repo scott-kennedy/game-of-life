@@ -9,6 +9,8 @@ import {
   SimpleChanges
 } from '@angular/core';
 
+import { Cell } from '../../core/models/cell';
+
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'cgol-board',
@@ -67,7 +69,7 @@ export class BoardComponent implements OnInit, OnChanges {
     const maxCells = this.width * this.height;
     this.cells = [];
     for (let i = 0; i < maxCells; i++) {
-      const cell = {
+      const cell: Cell = {
         id: i,
         width: this.cellWidth,
         height: this.cellHeight,
@@ -84,7 +86,7 @@ export class BoardComponent implements OnInit, OnChanges {
   updateCells(gameboard: any[]) {
     const size = gameboard.length;
     for (let i = 0; i < size; i++) {
-      const currentCell = this.cells[i];
+      const currentCell: Cell = this.cells[i];
       const cellChanged = gameboard[i] !== currentCell.isAlive;
       if (cellChanged) {
         this.cells[i] = Object.assign({}, this.cells[i], { isAlive: gameboard[i] });

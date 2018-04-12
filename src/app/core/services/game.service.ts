@@ -3,6 +3,8 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { interval } from 'rxjs/observable/interval';
 
+import { Gameboard } from '../models/gameboard';
+
 /* Rules:
  *  Any live cell with fewer than two live neighbours dies, as if caused by underpopulation.
  *  Any live cell with two or three live neighbours lives on to the next generation.
@@ -13,7 +15,7 @@ import { interval } from 'rxjs/observable/interval';
 export class GameService {
   constructor() {}
 
-  buildNewGameboard(width, height): Observable<any> {
+  buildNewGameboard(width: number, height: number): Observable<Gameboard> {
     return this.initializeLiveCells(width, height).switchMap(livingCells =>
       this.createEmptyBoard(width, height).switchMap(board =>
         this.addLivingCells(board, width, livingCells)
@@ -21,10 +23,12 @@ export class GameService {
     );
   }
 
-  getNextGeneration(gameboard = []): Observable<any> {
-    const nextGameboard = gameboard.map(row => [...row]);
+  getNextGeneration(gameboard: Gameboard = []): Observable<Gameboard> {
+    const nextGameboard = gameboard.map(row => [...row]) as Gameboard;
     const rows = gameboard.length;
     const cols = gameboard[0].length;
+
+    const getValue = gameboard[0][1];
 
     for (let row = 0; row < rows; row++) {
       for (let col = 0; col < cols; col++) {
@@ -43,7 +47,7 @@ export class GameService {
     return of(nextGameboard);
   }
 
-  checkGameEnded(gameboard = []): Observable<boolean> {
+  checkGameEnded(gameboard: Gameboard = []): Observable<boolean> {
     // We flatten the gameboard in two places, maybe we should just always return a flattened
     // gameboard that way the service can take care of everything.
     const flatGameboard = [].concat.apply([], gameboard);
@@ -52,7 +56,7 @@ export class GameService {
     return of(!hasLivingCells);
   }
 
-  toggleCell(gameboard, cellIndex): Observable<any> {
+  toggleCell(gameboard: Gameboard, cellIndex: number): Observable<Gameboard> {
     const nextGameboard = gameboard.map(boardRow => [...boardRow]);
     const width = gameboard[0].length;
 
@@ -79,7 +83,7 @@ export class GameService {
     );
   }
 
-  private addLivingCells(board: number, width: number, cells = []): Observable<any> {
+  private addLivingCells(board: Gameboard, width: number, cells = []): Observable<Gameboard> {
     cells.map(cell => {
       const col = cell[0];
       const row = cell[1];
@@ -88,7 +92,7 @@ export class GameService {
     return of(board);
   }
 
-  private initializeLiveCells(width: number, height: number): Observable<any> {
+  private initializeLiveCells(width: number, height: number): Observable<Gameboard> {
     const liveCells = [];
 
     for (let y = 0; y < height; y++) {
@@ -103,7 +107,7 @@ export class GameService {
     return of(liveCells);
   }
 
-  private createEmptyBoard(width: number, height: number): Observable<any> {
+  private createEmptyBoard(width: number, height: number): Observable<Gameboard> {
     return of(
       Array(height)
         .fill(0)
@@ -119,7 +123,7 @@ export class GameService {
     }
   }
 
-  private compareGenerations(gameboard, nextGameboard): boolean {
+  private compareGenerations(gameboard: Gameboard, nextGameboard: Gameboard): boolean {
     // Lazy way of comapring the two arrays
     return gameboard.toString() === nextGameboard.toString();
   }
