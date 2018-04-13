@@ -90,7 +90,7 @@ export class NextSuccess implements Action {
   constructor(public payload: Gameboard) {}
 }
 export class NextFailure implements Action {
-  readonly type = NEXT;
+  readonly type = NEXT_FAILURE;
 }
 
 export class GameOver implements Action {

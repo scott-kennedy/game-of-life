@@ -1,7 +1,11 @@
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/exhaustMap';
+import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/operator/concatMap';
 import 'rxjs/add/operator/takeWhile';
+import 'rxjs/add/operator/withLatestFrom';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mapTo';
 import 'rxjs/add/operator/take';
@@ -15,6 +19,7 @@ import * as game from '../../core/actions/game';
 import * as fromRoot from '../../reducers';
 
 import { GameService } from '../../core/services/game.service';
+import { Gameboard } from '../../core/models/gameboard';
 
 @Injectable()
 export class GameEffects {
@@ -22,9 +27,12 @@ export class GameEffects {
   gameSetup$ = this.actions$
     .ofType(game.INITIALIZE)
     .map((action: game.Initialize) => action.payload)
-    .switchMap(size => this.gameService.buildNewGameboard(size.width, size.height))
-    .map(gameboard => new game.InitializeSuccess(gameboard))
-    .catch(err => of(err));
+    .exhaustMap(size =>
+      this.gameService
+        .buildNewGameboard(size.width, size.height)
+        .map(gameboard => new game.InitializeSuccess(gameboard))
+        .catch(err => of(new game.InitializeFailure()))
+    );
 
   @Effect()
   tick$ = this.actions$.ofType(game.START).switchMap(() => {
@@ -37,54 +45,54 @@ export class GameEffects {
   @Effect()
   resetGameboard$ = this.actions$
     .ofType(game.RESET)
-    .switchMap(() => this.store.select(fromRoot.getGameboardDimensions).take(1))
-    .switchMap(size => this.gameService.buildNewGameboard(size.width, size.height))
-    .map(board => new game.ResetSuccess(board))
-    .catch(err => of(err).mapTo(new game.ResetFailure()));
+    .withLatestFrom(this.store.select(fromRoot.getGameboardDimensions))
+    .exhaustMap(([action, dimensions]) =>
+      this.gameService
+        .buildNewGameboard(dimensions.width, dimensions.height)
+        .map(gameboard => new game.ResetSuccess(gameboard))
+        .catch(err => of(new game.ResetFailure()))
+    );
 
   @Effect()
   getNextGeneration$ = this.actions$
     .ofType(game.NEXT)
-    .switchMap(() => this.store.select(fromRoot.getGameboard).take(1))
-    .switchMap(gameboard => this.gameService.getNextGeneration(gameboard))
-    .switchMap(gameboard =>
-      this.gameService.checkGameEnded(gameboard).map(isGameOver => {
-        if (isGameOver) {
-          return new game.GameOver(gameboard);
-        } else {
-          return new game.NextSuccess(gameboard);
-        }
-      })
-    )
-    .catch(err => of(err));
+    .withLatestFrom(this.store.select(fromRoot.getGameboard))
+    .mergeMap(([action, gameboard]) => {
+      return this.gameService.getNextGeneration(gameboard).switchMap(nextBoard =>
+        this.gameService
+          .checkGameEnded(nextBoard)
+          .map(isGameOver => {
+            if (isGameOver) {
+              return new game.GameOver(nextBoard);
+            } else {
+              return new game.NextSuccess(nextBoard);
+            }
+          })
+          .catch(() => of(new game.NextFailure()))
+      );
+    });
 
   @Effect()
   resizeGameboard$ = this.actions$
     .ofType(game.CHANGE_WIDTH, game.CHANGE_HEIGHT)
-    .switchMap(() => this.store.select(fromRoot.getGameboardDimensions).take(1))
-    .switchMap(dimensions =>
-      this.gameService.buildNewGameboard(dimensions.width, dimensions.height)
-    )
-    .map(gameboard => new game.ChangeDimensionsSuccess(gameboard))
-    .catch(err => of(err));
+    .withLatestFrom(this.store.select(fromRoot.getGameboardDimensions))
+    .concatMap(([action, dimensions]) =>
+      this.gameService
+        .buildNewGameboard(dimensions.width, dimensions.height)
+        .map(gameboard => new game.ChangeDimensionsSuccess(gameboard))
+        .catch(err => of(new game.ChangeDimensionsFailure()))
+    );
 
   @Effect()
   toggleCell$ = this.actions$
-    .ofType<game.ToggleCell>(game.TOGGLE_CELL)
-    .switchMap((action: game.ToggleCell) =>
-      this.store
-        .select(fromRoot.getGameboard)
-        .take(1)
-        .map(currentGameboard => {
-          return {
-            gameboard: currentGameboard,
-            cellIndex: action.payload
-          };
-        })
-    )
-    .switchMap(data => this.gameService.toggleCell(data.gameboard, data.cellIndex))
-    .map(gameboard => new game.ToggleCellSuccess(gameboard))
-    .catch(err => of(err));
+    .ofType(game.TOGGLE_CELL)
+    .withLatestFrom(this.store.select(fromRoot.getGameboard))
+    .concatMap(([action, gameboard]: [game.ToggleCell, Gameboard]) => {
+      return this.gameService
+        .toggleCell(gameboard, action.payload)
+        .map(newGameboard => new game.ToggleCellSuccess(newGameboard))
+        .catch(err => of(new game.ToggleCellFailure()));
+    });
 
   constructor(
     private store: Store<fromRoot.State>,

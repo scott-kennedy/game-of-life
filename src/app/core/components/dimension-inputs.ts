@@ -67,16 +67,12 @@ export class DimensionsComponent {
       return null;
     }
 
-    // Still do unnecessary update when you use an invalid value, ex: 2 is below the minimum of 5 so
-    // 2 !== 5 even though we return 5 from this function.
     if (this[field] === value) {
       return null;
     }
 
-    if (inputValue < inputLimits.min) {
-      return inputLimits.min;
-    } else if (inputValue > inputLimits.max) {
-      return inputLimits.max;
+    if (inputValue < inputLimits.min || inputValue > inputLimits.max) {
+      return null;
     }
 
     return inputValue;

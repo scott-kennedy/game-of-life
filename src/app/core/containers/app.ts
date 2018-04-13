@@ -55,7 +55,6 @@ export class AppComponent implements OnInit, OnDestroy {
       .map(() => calculateDisplayArea())
       .subscribe(dimensions => {
         this.viewportSize = dimensions;
-        console.log('Viewport:', dimensions);
       });
   }
 

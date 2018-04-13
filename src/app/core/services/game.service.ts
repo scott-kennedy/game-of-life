@@ -24,6 +24,10 @@ export class GameService {
   }
 
   getNextGeneration(gameboard: Gameboard = []): Observable<Gameboard> {
+    if (!gameboard.length) {
+      return of(gameboard);
+    }
+
     const nextGameboard = gameboard.map(row => [...row]) as Gameboard;
     const rows = gameboard.length;
     const cols = gameboard[0].length;

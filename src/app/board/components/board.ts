@@ -84,12 +84,19 @@ export class BoardComponent implements OnInit, OnChanges {
 
   // TODO cell updating is a candidate to move to store
   updateCells(gameboard: any[]) {
+    // TODO if gameboard.length < this.cells.length, slice this.cells to remove delete call
+    // from for loop
     const size = gameboard.length;
+
     for (let i = 0; i < size; i++) {
       const currentCell: Cell = this.cells[i];
-      const cellChanged = gameboard[i] !== currentCell.isAlive;
-      if (cellChanged) {
-        this.cells[i] = Object.assign({}, this.cells[i], { isAlive: gameboard[i] });
+      if (currentCell) {
+        const cellChanged = gameboard[i] !== currentCell.isAlive;
+        if (cellChanged) {
+          this.cells[i] = Object.assign({}, this.cells[i], { isAlive: gameboard[i] });
+        }
+      } else {
+        delete this.cells[i];
       }
     }
   }
