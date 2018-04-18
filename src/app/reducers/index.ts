@@ -57,7 +57,6 @@ export const metaReducers: MetaReducer<State>[] = !environment.production
 export const selectGameState = createFeatureSelector<fromGame.State>('game');
 
 export const getPlaying = createSelector(selectGameState, fromGame.getPlaying);
-export const getCompleted = createSelector(selectGameState, fromGame.getCompleted);
 export const getGameboard = createSelector(selectGameState, fromGame.getGameboard);
 export const getGeneration = createSelector(selectGameState, fromGame.getGeneration);
 export const getHeight = createSelector(selectGameState, fromGame.getHeight);

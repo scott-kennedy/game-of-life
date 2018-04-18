@@ -94,7 +94,6 @@ export function reducer(state = initialState, action: game.Actions): State {
 }
 
 export const getPlaying = (state: State) => state.status === 'playing';
-export const getCompleted = (state: State) => state.status === 'complete';
 export const getGameboard = (state: State) => state.gameboard;
 export const getGeneration = (state: State) => state.generation;
 export const getHeight = (state: State) => state.height;
