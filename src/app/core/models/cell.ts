@@ -1,4 +1,4 @@
-export class Cell {
+export interface Cell {
   id: number;
   height: number;
   width: number;
