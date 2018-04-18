@@ -67,7 +67,8 @@ export class DimensionsComponent {
       return null;
     }
 
-    if (this[field] === value) {
+    const currentFieldValue = this[field];
+    if (currentFieldValue === value) {
       return null;
     }
 
