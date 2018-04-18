@@ -1,22 +1,8 @@
-/* cgol-layout {
-  display: grid;
-  grid-gap: 1em;
-  grid-template-areas: ". header ."
-    ". content ."
-    ". footer ."; */
-  /* grid-template-columns: auto 800px auto; */
-  /* grid-template-rows: 10vh 70vh auto; */
-  /* grid-template-columns: 200px 1fr 200px;
-  grid-template-rows: auto 1fr auto;
-  height: 100vh;
-  justify-items: center;
-} */
-
 cgol-layout {
   display: flex;
-  align-items: center;
   flex-direction: column;
   min-height: 100vh;
+  align-items: center;
 }
 
 @media (min-width: 768px) {
@@ -76,8 +62,8 @@ cgol-dimensions {
 .subtitle {
   margin: 0;
   font-size: 1.8rem;
-  line-height: 1.5;
   letter-spacing: -.05rem;
+  line-height: 1.5;
 }
 
 @media (min-width: 550px) {
