@@ -30,7 +30,7 @@ const calculateDisplayArea = () => {
 export class AppComponent implements OnInit, OnDestroy {
   boardWidth$ = this.store.select(fromRoot.getWidth);
   boardHeight$ = this.store.select(fromRoot.getHeight);
-  gameboard$ = this.store.select(fromRoot.getFlattenedGameboard);
+  gameboard$ = this.store.select(fromRoot.getGameboard);
   isPlaying$ = this.store.select(fromRoot.getPlaying);
   generation$ = this.store.select(fromRoot.getGeneration);
   viewportSize = calculateDisplayArea();

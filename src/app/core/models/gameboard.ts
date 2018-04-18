@@ -1,1 +1,1 @@
-export type Gameboard = number[][];
+export type Gameboard = number[];

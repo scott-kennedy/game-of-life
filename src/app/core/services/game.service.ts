@@ -18,30 +18,24 @@ export class GameService {
   buildNewGameboard(width: number, height: number): Observable<Gameboard> {
     return this.initializeLiveCells(width, height).switchMap(livingCells =>
       this.createEmptyBoard(width, height).switchMap(board =>
-        this.addLivingCells(board, width, livingCells)
+        this.addLivingCells(board, livingCells)
       )
     );
   }
 
-  getNextGeneration(gameboard: Gameboard = []): Observable<Gameboard> {
+  getNextGeneration(width: number, gameboard: Gameboard = []): Observable<Gameboard> {
     if (!gameboard.length) {
       return of(gameboard);
     }
+    const nextGameboard = gameboard.slice();
+    const boardSize = gameboard.length;
 
-    const nextGameboard = gameboard.map(row => [...row]) as Gameboard;
-    const rows = gameboard.length;
-    const cols = gameboard[0].length;
-
-    const getValue = gameboard[0][1];
-
-    for (let row = 0; row < rows; row++) {
-      for (let col = 0; col < cols; col++) {
-        const neighbors = this.countLivingNeighbors(row, col, gameboard);
-        if (neighbors > 3 || neighbors < 2) {
-          nextGameboard[row][col] = 0;
-        } else if (neighbors === 3) {
-          nextGameboard[row][col] = 1;
-        }
+    for (let i = 0; i < boardSize; i++) {
+      const neighbors = this.countLivingNeighbors(i, width, gameboard);
+      if (neighbors > 3 || neighbors < 2) {
+        nextGameboard[i] = 0;
+      } else if (neighbors === 3) {
+        nextGameboard[i] = 1;
       }
     }
 
@@ -52,59 +46,86 @@ export class GameService {
   }
 
   checkGameEnded(gameboard: Gameboard = []): Observable<boolean> {
-    // We flatten the gameboard in two places, maybe we should just always return a flattened
-    // gameboard that way the service can take care of everything.
-    const flatGameboard = [].concat.apply([], gameboard);
-    const hasLivingCells = flatGameboard.filter(cell => cell === 1).length;
+    const hasLivingCells = gameboard.filter(cell => cell === 1).length;
 
     return of(!hasLivingCells);
   }
 
-  toggleCell(gameboard: Gameboard, cellIndex: number): Observable<Gameboard> {
-    const nextGameboard = gameboard.map(boardRow => [...boardRow]);
-    const width = gameboard[0].length;
-
-    const row = Math.floor(cellIndex / width);
-    const col = cellIndex % width;
-    const cellIsAlive = nextGameboard[row][col];
-
-    nextGameboard[row][col] = cellIsAlive ? 0 : 1;
+  toggleCell(cellIndex: number, width: number, board: Gameboard): Observable<Gameboard> {
+    const nextGameboard = board.slice();
+    nextGameboard[cellIndex] = nextGameboard[cellIndex] ? 0 : 1;
 
     return of(nextGameboard);
   }
 
-  private countLivingNeighbors(row: number, col: number, board): number {
-    // Simplified way of counting neighbors
-    return (
-      this.getNeighbor(row - 1, col - 1, board) +
-      this.getNeighbor(row - 1, col, board) +
-      this.getNeighbor(row - 1, col + 1, board) +
-      this.getNeighbor(row, col - 1, board) +
-      this.getNeighbor(row, col + 1, board) +
-      this.getNeighbor(row + 1, col - 1, board) +
-      this.getNeighbor(row + 1, col, board) +
-      this.getNeighbor(row + 1, col + 1, board)
-    );
+  private countLivingNeighbors(cellIndex: number, width: number, board: Gameboard): number {
+    const boardSize = board.length;
+    let neighborCount = 0;
+    let checkAbove = false;
+    let checkBelow = false;
+
+    // Above
+    if (cellIndex >= width) {
+      checkAbove = true;
+      neighborCount += board[cellIndex - width];
+    }
+
+    // Below
+    if (cellIndex + width < boardSize) {
+      checkBelow = true;
+      neighborCount += board[cellIndex + width];
+    }
+
+    // Right
+    if (cellIndex % width !== width - 1) {
+      const rightNeighborIndex = cellIndex + 1;
+      neighborCount += board[rightNeighborIndex];
+
+      // Above
+      if (checkAbove) {
+        neighborCount += board[rightNeighborIndex - width];
+      }
+
+      // Below
+      if (checkBelow) {
+        neighborCount += board[rightNeighborIndex + width];
+      }
+    }
+
+    // Left
+    if (cellIndex % width !== 0) {
+      const leftNeighborIndex = cellIndex - 1;
+      neighborCount += board[leftNeighborIndex];
+
+      // Above
+      if (checkAbove) {
+        neighborCount += board[leftNeighborIndex - width];
+      }
+
+      // Below
+      if (checkBelow) {
+        neighborCount += board[leftNeighborIndex + width];
+      }
+    }
+
+    return neighborCount;
   }
 
-  private addLivingCells(board: Gameboard, width: number, cells = []): Observable<Gameboard> {
-    cells.map(cell => {
-      const col = cell[0];
-      const row = cell[1];
-      board[row][col] = 1;
-    });
-    return of(board);
+  private addLivingCells(board: Gameboard, cells: number[] = []): Observable<Gameboard> {
+    const newBoard = board.slice();
+    cells.forEach(cell => (newBoard[cell] = 1));
+
+    return of(newBoard);
   }
 
-  private initializeLiveCells(width: number, height: number): Observable<Gameboard> {
+  private initializeLiveCells(width: number, height: number): Observable<number[]> {
     const liveCells = [];
+    const boardSize = width * height;
 
-    for (let y = 0; y < height; y++) {
-      for (let x = 0; x < width; x++) {
-        const isAlive = Math.random() > 0.85 ? true : false;
-        if (isAlive) {
-          liveCells.push([x, y]);
-        }
+    for (let i = 0; i < boardSize; i++) {
+      const isAlive = Math.random() > 0.85 ? true : false;
+      if (isAlive) {
+        liveCells.push(i);
       }
     }
 
@@ -112,19 +133,9 @@ export class GameService {
   }
 
   private createEmptyBoard(width: number, height: number): Observable<Gameboard> {
-    return of(
-      Array(height)
-        .fill(0)
-        .map(() => Array(width).fill(0))
-    );
-  }
+    const boardSize = width * height;
 
-  private getNeighbor(row: number, col: number, board): number {
-    try {
-      return board[row][col] !== undefined ? board[row][col] : 0;
-    } catch (e) {
-      return 0;
-    }
+    return of(Array(boardSize).fill(0));
   }
 
   private compareGenerations(gameboard: Gameboard, nextGameboard: Gameboard): boolean {

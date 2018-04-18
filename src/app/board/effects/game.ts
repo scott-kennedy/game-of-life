@@ -56,20 +56,22 @@ export class GameEffects {
   @Effect()
   getNextGeneration$ = this.actions$
     .ofType(game.NEXT)
-    .withLatestFrom(this.store.select(fromRoot.getGameboard))
-    .mergeMap(([action, gameboard]) => {
-      return this.gameService.getNextGeneration(gameboard).switchMap(nextBoard =>
-        this.gameService
-          .checkGameEnded(nextBoard)
-          .map(isGameOver => {
-            if (isGameOver) {
-              return new game.GameOver(nextBoard);
-            } else {
-              return new game.NextSuccess(nextBoard);
-            }
-          })
-          .catch(() => of(new game.NextFailure()))
-      );
+    .withLatestFrom(this.store.select(fromRoot.getGameboardWithWidth))
+    .mergeMap(([action, fromStore]) => {
+      return this.gameService
+        .getNextGeneration(fromStore.width, fromStore.gameboard)
+        .switchMap(nextBoard =>
+          this.gameService
+            .checkGameEnded(nextBoard)
+            .map(isGameOver => {
+              if (isGameOver) {
+                return new game.GameOver(nextBoard);
+              } else {
+                return new game.NextSuccess(nextBoard);
+              }
+            })
+            .catch(() => of(new game.NextFailure()))
+        );
     });
 
   @Effect()
@@ -86,13 +88,15 @@ export class GameEffects {
   @Effect()
   toggleCell$ = this.actions$
     .ofType(game.TOGGLE_CELL)
-    .withLatestFrom(this.store.select(fromRoot.getGameboard))
-    .concatMap(([action, gameboard]: [game.ToggleCell, Gameboard]) => {
-      return this.gameService
-        .toggleCell(gameboard, action.payload)
-        .map(newGameboard => new game.ToggleCellSuccess(newGameboard))
-        .catch(err => of(new game.ToggleCellFailure()));
-    });
+    .withLatestFrom(this.store.select(fromRoot.getGameboardWithWidth))
+    .concatMap(
+      ([action, fromStore]: [game.ToggleCell, { gameboard: Gameboard; width: number }]) => {
+        return this.gameService
+          .toggleCell(action.payload, fromStore.width, fromStore.gameboard)
+          .map(newGameboard => new game.ToggleCellSuccess(newGameboard))
+          .catch(err => of(new game.ToggleCellFailure()));
+      }
+    );
 
   constructor(
     private store: Store<fromRoot.State>,
